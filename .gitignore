@@ -3,3 +3,5 @@ dist/
 
 /prisma/prisma
 /data-res-postgres
+
+.env
