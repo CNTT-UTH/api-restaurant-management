@@ -10,6 +10,8 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import path from 'path'
 import { createFolder } from '@/utils/helpers'
+import authRoutes from './routes/auth.route'
+import accountRoutes from './routes/account.route'
 
 const fastify = Fastify({
   logger: false
@@ -40,6 +42,12 @@ const start = async () => {
       cors: {
         origin: envConfig.CLIENT_URL
       }
+    })
+    fastify.register(authRoutes, {
+      prefix: '/auth'
+    })
+    fastify.register(accountRoutes, {
+      prefix: '/accounts'
     })
     await fastify.listen({
       port: envConfig.PORT,
