@@ -13,6 +13,7 @@ import { createFolder } from '@/utils/helpers'
 import authRoutes from './routes/auth.route'
 import accountRoutes from './routes/account.route'
 import dishRoutes from './routes/dish.route'
+import tablesRoutes from './routes/table.route'
 
 const fastify = Fastify({
   logger: false
@@ -51,7 +52,10 @@ const start = async () => {
       prefix: '/accounts'
     })
     fastify.register(dishRoutes, {
-      prefix: '/dishs'
+      prefix: '/dishes'
+    })
+    fastify.register(tablesRoutes, {
+      prefix: '/tables'
     })
     await fastify.listen({
       port: envConfig.PORT,

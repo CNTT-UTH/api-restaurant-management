@@ -270,7 +270,7 @@ export const createGuestController = async (body: CreateGuestBodyType) => {
 
   if (table.status === TableStatus.Hidden) {
     throw new Error(`Bàn ${table.number} đã bị ẩn, vui lòng chọn bàn khác`)
-  }
+  } 
   const guest = await prisma.guest.create({
     data: body
   })
