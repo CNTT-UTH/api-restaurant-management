@@ -12,6 +12,7 @@ import path from 'path'
 import { createFolder } from '@/utils/helpers'
 import authRoutes from './routes/auth.route'
 import accountRoutes from './routes/account.route'
+import dishRoutes from './routes/dish.route'
 
 const fastify = Fastify({
   logger: false
@@ -48,6 +49,9 @@ const start = async () => {
     })
     fastify.register(accountRoutes, {
       prefix: '/accounts'
+    })
+    fastify.register(dishRoutes, {
+      prefix: '/dishs'
     })
     await fastify.listen({
       port: envConfig.PORT,
