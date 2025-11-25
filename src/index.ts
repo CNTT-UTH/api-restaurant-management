@@ -57,6 +57,9 @@ const start = async () => {
     fastify.register(tablesRoutes, {
       prefix: '/tables'
     })
+    fastify.register(tablesRoutes, {
+      prefix: '/orders'
+    })
     await fastify.listen({
       port: envConfig.PORT,
       host: envConfig.DOCKER ? '0.0.0.0' : 'localhost'

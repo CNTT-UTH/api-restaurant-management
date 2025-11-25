@@ -1,6 +1,7 @@
 node_modules/
 dist/
 
+/src/prisma/
 /prisma/prisma
 /data-res-postgres
 
