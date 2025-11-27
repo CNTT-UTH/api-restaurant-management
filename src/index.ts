@@ -2,6 +2,8 @@
 import envConfig, { API_URL } from '@/config'
 import { errorHandlerPlugin } from '@/plugins/errorHandler.plugins'
 import validatorCompilerPlugin from '@/plugins/validatorCompiler.plugins'
+import accountRoutes from '@/routes/account.route'
+import authRoutes from '@/routes/auth.route'
 import fastifyAuth from '@fastify/auth'
 import fastifyCookie from '@fastify/cookie'
 import fastifyHelmet from '@fastify/helmet'
@@ -10,10 +12,16 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import path from 'path'
 import { createFolder } from '@/utils/helpers'
-import authRoutes from './routes/auth.route'
-import accountRoutes from './routes/account.route'
-import dishRoutes from './routes/dish.route'
-import tablesRoutes from './routes/table.route'
+import mediaRoutes from '@/routes/media.route'
+import staticRoutes from '@/routes/static.route'
+import dishRoutes from '@/routes/dish.route'
+import { initOwnerAccount } from '@/controllers/account.controller'
+import tablesRoutes from '@/routes/table.route'
+import guestRoutes from '@/routes/guest.route'
+import orderRoutes from '@/routes/order.route'
+import { socketPlugin } from '@/plugins/socket.plugins'
+import indicatorRoutes from '@/routes/indicator.route'
+import autoRemoveRefreshTokenJob from '@/jobs/autoRemoveRefreshToken.job'
 
 const fastify = Fastify({
   logger: false
@@ -23,6 +31,7 @@ const fastify = Fastify({
 const start = async () => {
   try {
     createFolder(path.resolve(envConfig.UPLOAD_FOLDER))
+    autoRemoveRefreshTokenJob()
     const whitelist = ['*']
     fastify.register(cors, {
       origin: whitelist, // Cho phép tất cả các domain gọi API
@@ -45,11 +54,18 @@ const start = async () => {
         origin: envConfig.CLIENT_URL
       }
     })
+    fastify.register(socketPlugin)
     fastify.register(authRoutes, {
       prefix: '/auth'
     })
     fastify.register(accountRoutes, {
       prefix: '/accounts'
+    })
+    fastify.register(mediaRoutes, {
+      prefix: '/media'
+    })
+    fastify.register(staticRoutes, {
+      prefix: '/static'
     })
     fastify.register(dishRoutes, {
       prefix: '/dishes'
@@ -57,9 +73,16 @@ const start = async () => {
     fastify.register(tablesRoutes, {
       prefix: '/tables'
     })
-    fastify.register(tablesRoutes, {
+    fastify.register(orderRoutes, {
       prefix: '/orders'
     })
+    fastify.register(guestRoutes, {
+      prefix: '/guest'
+    })
+    fastify.register(indicatorRoutes, {
+      prefix: '/indicators'
+    })
+    await initOwnerAccount()
     await fastify.listen({
       port: envConfig.PORT,
       host: envConfig.DOCKER ? '0.0.0.0' : 'localhost'
