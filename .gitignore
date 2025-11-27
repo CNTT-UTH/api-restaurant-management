@@ -6,3 +6,5 @@ dist/
 /data-res-postgres
 
 .env
+
+.idea

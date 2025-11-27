@@ -1,3 +1,9 @@
-import { PrismaClient } from "../../prisma/prisma/client";
+import envConfig from '@/config'
+import { PrismaClient } from '@/prisma'
 
-export const prisma = PrismaClient
+const prisma = new PrismaClient({
+  datasourceUrl: envConfig.DATABASE_URL,
+  log: ['info']
+})
+
+export default prisma
