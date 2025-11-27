@@ -1,7 +1,7 @@
 import { DishStatusValues, OrderStatusValues } from '@/constants/type'
+import { AccountSchema } from '@/validation/account.schema'
+import { TableSchema } from '@/validation/table.schema'
 import z from 'zod'
-import { AccountSchema } from './account.schema'
-import { TableSchema } from './table.schema'
 
 const DishSnapshotSchema = z.object({
   id: z.number(),
@@ -80,6 +80,16 @@ export const GetOrderDetailRes = z.object({
 })
 
 export type GetOrderDetailResType = z.TypeOf<typeof GetOrderDetailRes>
+
+export const PayGuestOrdersBody = z.object({
+  guestId: z.number()
+})
+
+export type PayGuestOrdersBodyType = z.TypeOf<typeof PayGuestOrdersBody>
+
+export const PayGuestOrdersRes = GetOrdersRes
+
+export type PayGuestOrdersResType = z.TypeOf<typeof PayGuestOrdersRes>
 
 export const CreateOrdersBody = z
   .object({
