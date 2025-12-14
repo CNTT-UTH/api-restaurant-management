@@ -22,8 +22,8 @@ import {
   AccountResType,
   ChangePasswordBody,
   ChangePasswordBodyType,
-  ChangePasswordRes,
-  ChangePasswordResType,
+  ChangePasswordV2Res,
+  ChangePasswordV2ResType,
   CreateEmployeeAccountBody,
   CreateEmployeeAccountBodyType,
   CreateGuestBody,
@@ -196,14 +196,14 @@ export default async function accountRoutes(fastify: FastifyInstance, options: F
   )
 
   fastify.put<{
-    Reply: ChangePasswordResType
+    Reply: ChangePasswordV2ResType
     Body: ChangePasswordBodyType
   }>(
     '/change-password',
     {
       schema: {
         response: {
-          200: ChangePasswordRes
+          200: ChangePasswordV2Res
         },
         body: ChangePasswordBody
       },
@@ -212,7 +212,7 @@ export default async function accountRoutes(fastify: FastifyInstance, options: F
     async (request, reply) => {
       const result = await changePasswordController(request.decodedAccessToken?.userId as number, request.body)
       reply.send({
-        data: result as ChangePasswordResType['data'],
+        data: result as ChangePasswordV2ResType['data'],
         message: 'Đổi mật khẩu thành công'
       })
     }
